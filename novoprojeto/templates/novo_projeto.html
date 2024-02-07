@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'cabecalho' %}
+    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="{% static 'projeto/css/novo_projeto.css' %}" rel="stylesheet">
+{% endblock 'cabecalho' %}
+
+{% block 'conteudo' %}
+
+    <div class="container">
+        <br>
+        <br>
+        <div class="row">
+            
+            <div class="col-md">
+                <!--INPUT/ENTRADA - PARA RECEBER OS DADOS DIGITADOS PELO USUÁRIO NO CADASTRO DO PROJETO-->
+                <div class="box-form">
+
+                    <!--enviando os dados para a view de novo_projeto-->
+                    <form action="{% url 'novo_projeto' %}" method="POST"> {% csrf_token %}
+                        <h3>Novo projeto</h3>
+
+
+                        {% if messages %}
+                            <br>
+                            {% for message in messages %}
+                                <section class="alert {{message.tags}}">
+                                    {{message}}
+                                </section>
+                            {% endfor %}
+                        {% endif %}
+                        <br>
+                        <label>Título</label>
+                        <input type="text" class="form-control" placeholder="Informe o título" name="titulo">
+
+                        
+                        <br>
+                        <label>Escopo</label>
+                        <textarea class="form-control" placeholder="O escopo do projeto estabelece limites, metas e prazos; garantindo que as metas e objetivos sejam atingidos de forma eficiente." name="escopo"></textarea>
+                        <br>
+
+                        <br>
+                        <label>Comentários</label>
+                        <textarea class="form-control" placeholder="Observações." name="observacao"></textarea>
+                        <br>
+
+                        <div class="row">
+
+                            <br>
+                            <label>Data de lançamento</label>
+                            <input type="date" class="form-control" placeholder="Inicial" name="data_inicio">        
+                            <br>
+
+                            <br>
+                            <label>Data término</label>
+                            <input type="date" class="form-control" name="data_fim">                                
+                            <br>
+
+                            <!--
+                            <br>
+                            <label>Orçamento</label>
+                            <input type="number" class="form-control" name="orcamento" step="0.01">                                                           
+                            <br>
+                            -->
+
+
+                            <label>Orçamento</label>
+                            <input type="number" class="form-control" name="orcamento" step="0.01" oninput="formatarOrcamento(this)">
+                            <br>
+
+                            <script>
+                            function formatarOrcamento(input) {
+                                // Obtém o valor do campo
+                                let valor = input.value;
+                                
+                                // Formata o valor
+                                valor = parseFloat(valor).toFixed(4); // Define 4 casas decimais
+                                valor = "R$ " + valor; // Adiciona o símbolo R$
+                                
+                                // Atualiza o valor no campo
+                                input.value = valor;
+                            }
+                            </script>
+
+                            
+
+                                                          
+
+                        </div>
+
+
+                        <div class="row">
+                               
+                                <!--ABAIXO DE ORÇAMENTO NA PARTE DE CADASTRO AINDA-->
+                                <!--campos a serem informados: Categoria, Situação,  Dificul, Recurs --> 
+                                <div class="col-md">
+                                    <label for="">Categoria</label>
+                                    <select class="form-select" name="categoria">
+                                        <option value="">Todas as categorias</option>
+                                        {% for categoria in categorias %}
+                                            <option value="{{categoria.id}}">{{categoria.nome}}</option>
+                                            <!--passo o id pra função, e capturo o nome para registrar-->
+                                        {% endfor %}  
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md">
+                                    <label for="">Situação</label>
+                                    <select class="form-select" name="situacao">
+
+                                        <option value="">Todas as situações</option>
+                                        {% for situacao in situacoes %}
+                                            <option value="{{situacao.id}}">{{situacao.status}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md">
+                                    <label for="">Dificuldade</label>
+                                    <select class="form-select" name="dificuldade">
+                                        <option value="">Todas</option> 
+                                        {% for dificuldade in dificuldades %}
+                                            <option value="{{dificuldade.0}}">{{dificuldade.1}}</option>
+                                            
+                                        {% endfor %}                                        
+                                    </select>
+                                </div>
+
+                                <div class="col-md">
+                                    <label for="">Recurso</label>
+                                    <select class="form-select" name="recurso">
+                                        <option value="">Todos</option> 
+                                        {% for recurso in recursos %}
+                                            <option value="{{recurso.id}}">{{recurso.tiporecurso}}</option>
+                                            
+                                        {% endfor %}                                        
+                                    </select>
+                                </div>
+
+
+                            
+                        </div>
+                        <br>
+                        <input type="submit" value="Enviar" class="btn-cadastro">
+                        <br>
+                        <br>
+                        <br>
+
+                        
+
+                    </form>
+                </div>
+
+            </div>
+
+
+            <!--***********************CONSULTAS*******************************************-->
+            <div class="col-md">      <!--FIIIIIIIIILTRARRR==DO LADO DIREITO DA TELA DE NOVO PROJETO -->
+                <form action="{% url 'novo_projeto' %}" method="GET"> <!--no get não precisa do csrf_token-->
+                    <div class="row">
+
+                        <div class="col-md">
+                            <label for="">Categoria</label>
+                            <select name="categoria" id="" class="form-select">
+                                <option value="">Todas as categorias</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{categoria.id}}">{{categoria.nome}}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+
+
+                        <div class="col-md">
+                            <label for="">Situação</label>
+                            <select name="status" id="" class="form-select">                                
+                                <option value="">Todas as situações</option>
+                                {% for status in situacoes %}
+                                    <option value="{{status.id}}">{{status.status}}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+
+
+                        <!--
+                            <br>
+                            <p style="background-color: orange; padding: 10px;">Notifica projeto!</p>
+                            <script>
+                                document.querySelector('#notificacao').style.display = 'block';
+
+
+                                <label for="">NOTIFICAÇÃO!!</label>
+                                <select name="notificacao" id="" class="form-select">
+                                <option value="">AVISO</option>                                
+                                {% for notificar in notificacao %}
+                                    <option value="{{notificar.0}}">{{notificar.1}}</option>
+                                            
+                                {% endfor %}
+
+
+                            </select>
+                            </script
+                            
+                        <br>
+
+                        -->
+                        
+
+
+
+                        <div class="col-md">
+                            <label for="">Dificuldade</label>
+                            <select name="dificuldade" id="" class="form-select">
+                                <option value="">Todas</option>                                
+                                {% for dificuldade in dificuldades %}
+                                    <option value="{{dificuldade.0}}">{{dificuldade.1}}</option>
+                                            
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                        <div class="col-md">
+                            <label for="">Recurso</label>
+                            <select name="tiporecurso" id="" class="form-select">
+                                <option value="">Todos</option>                                
+                                {% for recurso in recursos %}
+                                    <option value="{{recurso.id}}">{{recurso.tiporecurso}}</option>
+                                
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                       
+                        
+
+                        
+                                                      
+                        <!--
+                            <head>
+                                <title>Consultar Projetos por Período</title>
+                            </head>
+                            <body>
+                                <h1>Consultar Projetos por Período</h1>
+                                <form method="post">
+                                    
+                                    <label for="data_lancamento">Data de Início (DD/MM/AAAA):</label>
+                                    <input type="text" id="data_lancamento" name="data_lancamento"><br>
+                            
+                                    <label for="data_encerramento">Data de Fim (DD/MM/AAAA):</label>
+                                    <input type="text" id="data_encerramento" name="data_encerramento"><br>
+                            
+                                    <input type="submit" value="Consultar">
+                                </form>
+                            </body>> 
+
+
+
+                        -->
+                                       
+                        
+
+
+
+
+                        <div class="col-md">
+                            <br>
+                            <input type="submit" style="width: 100%" value="Filtrar" class="btn-cadastro">
+                        </div>
+                    </div>
+
+                </form>
+
+                <br>
+                <br>
+                        <!--RESPONSÁVEL POR TODO O PROJETO-SUA VISUALIZAÇÃO parte direita da tela -->
+
+                {% for novo in novoprojeto %}
+                    <div class="box-new-novoprojeto" onclick="flip_card({{novo.id}})">
+                        <div class="novoprojeto ">
+
+                            <div class="novoprojeto-categoria">  <!--AGRUPAR POR CATEGORIA DE FORMA DINÂMICA  -->
+                                {{novo.categoria}} <!--POSSO ACESSAR OS CAMPOS DA TABELA/CLASSE DE MODEL.PY-->
+                            </div>
+
+
+                            <!--
+                                <a href=""><i class='icone-exit bx bx-x-circle'></i></a>
+                                <br>
+                                <br>
+                                <div class="novoprojeto-box-item">
+                                    <p class="novoprojeto-item">{{novo.titulo}}</p>  
+                                    
+                                    <label>Notificação do projeto</label>
+                                    <p>{{ novo.notificacao }}</p>
+
+
+                                </div>
+
+                            -->
+
+                            
+                            
+                        </div>  
+                        <div class="escopo-novoprojeto" id="{{novo.id}}">  <!--MAS O ESCOPO FICA OCULTO -->
+                            {{novo.escopo}}
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+                {% endfor %}
+                
+
+            </div>
+        </div>
+    </div>
+    
+    <!--MOSTRA O DETALHAMENTO DO PROJETO AO CLICAR EM CIMA block é um elemento visivel em html-->
+    <script>
+        function flip_card(id){
+            
+            card = document.getElementById(id)
+            console.log(card.style.display)
+
+            if (card.style.display == 'none' || card.style.display == ''){
+                card.style.display = 'block'  
+            }else{
+                card.style.display = 'none'
+            }
+
+
+        }
+    </script>
+
+
+
+{% endblock 'conteudo' %}
+
+
