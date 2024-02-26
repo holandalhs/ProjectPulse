@@ -13,7 +13,7 @@ class Apostila(models.Model):
     
 
 class ViewApostila(models.Model): ##**Para controle de acesso às apostilas 
-    ip = models.GenericIPAddressField() #**pega o ip de quem acessou
+    ip = models.GenericIPAddressField() #*quem acessou
     apostila = models.ForeignKey(Apostila, on_delete=models.DO_NOTHING)
 
     def __str__(self):
