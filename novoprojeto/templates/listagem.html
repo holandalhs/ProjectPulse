@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'cabecalho' %}
+
+    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/novo_projeto.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/consultar_projeto.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/listagem.css' %}" rel="stylesheet">
+
+    <!--
+            <link href="{% static 'projeto/css/listar_projeto.css' %}" rel="stylesheet">
+
+    -->
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+{% endblock 'cabecalho' %}
+
+
+{% block 'conteudo' %}
+
+    {% include "partials/header.html" %}
+
+
+    <div class="container">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md">  <!--lista está acessando a model Validacao que tem projeto, executado, aprovado que podem ser acessados -->
+                <h3 class="fonte-secundaria" > Listagem iniciada  
+                    
+                    <!--  | 
+                        {% for lista in projetos_vinculados.projetos.all %} 
+                        <hr>
+                            {{lista.projeto.escopo}}  lista é uma tabale intermediária entre as Models LISTAGEM E VALIDACAO
+                            <hr>
+                            {% endfor %}
+
+                    -->
+                    
+                
+                </h3>
+                <span class="badge-categoria">Programação</span>
+                <span class="badge-categoria">Matemática</span>
+                <br>
+                <br>
+                <br>   
+                {% for lista in projetos_vinculados.projetos.all %}  <!--chamando variável projetos da classe Listagem de models -->
+                    <div class="box-new-projeto {% if lista.executado %}op2{% endif %}">
+                        <div class="projeto {{lista.projeto.css_dificuldade}}">
+
+                            <div class="projeto-categoria">
+                                {{lista.projeto.categoria}}
+                                
+                                
+                                
+                            </div>
+                            <br>
+                            <br>
+                            <div class="projeto-box-item" onclick="flip_card({{lista.id}})">
+                                <p class="projeto-item">{{lista.projeto.titulo}}</p>
+                            </div>
+
+                            {% if not lista.executado %}
+                                <div class="executar">
+                                    <a href="{% url 'executar_projeto' lista.id %}?aprovado=0&projeto_id={{projeto.id}}"><i class='bx bxs-x-square icone-vermelho'></i></a>
+                                    <a href="{% url 'executar_projeto' lista.id %}?aprovado=1&projeto_id={{projeto.id}}"><i class='bx bxs-check-square icone-verde' ></i></a>
+                                </div>
+                            {% else %}
+
+                                {% if lista.aprovado %}
+                                    <span class="badge bg-success">Aprovado</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Não aprovado</span>
+                                {% endif%}
+
+                            {% endif %}
+
+                            <!--
+                            <div class="executar">
+                                <a href=""><i class='bx bxs-x-square icone-vermelho'></i></a>
+                                <a href=""><i class='bx bxs-check-square icone-verde' ></i></a>
+                            </div>
+                            -->
+                            
+                            
+                            
+                        </div>
+                        <div class="escopo-projeto" id="{{lista.id}}">
+                            {{lista.projeto.escopo}}
+                        </div>
+                    </div>
+
+
+                    <br>
+                    <br>
+                {% endfor %}
+
+            </div>
+            <div class="col-md">
+
+                <h3 class="fonte-secundaria">Resultado</h3>
+                <p class="fonte-p">Aprovado(s): {{aprovados}}</p>
+                <p class="fonte-p">Não aprovado(s): {{nao_aprovados}}</p>
+                <p class="fonte-p">Projeto(s) a avaliar: {{a_avaliar}}</p>
+                <br>
+                <a class="btn-cadastro btn-listagem" href="{% url 'relatorio' projetos_vinculados.id %}">Relatório detalhado</a>
+            </div>
+        </div>
+
+    </div>
+    
+        <!--MOSTRA O DETALHAMENTO DO PROJETO AO CLICAR EM CIMA block é um elemento visivel em html-->
+    <script>
+        function flip_card(id){
+            
+            card = document.getElementById(id)
+            console.log(card.style.display)
+
+            if (card.style.display == 'none' || card.style.display == ''){
+                card.style.display = 'block'  
+            }else{
+                card.style.display = 'none'
+            }
+
+
+        }
+    </script>
+    
+    <!--
+        <script src="{% static 'projeto/js/projeto.js' %}"></script>
+    -->
+    
+{% endblock 'conteudo' %}

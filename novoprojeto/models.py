@@ -17,7 +17,6 @@ class Situacao(models.Model):
         return self.status            
 
 
-
 class Recurso(models.Model):
     tiporecurso = models.CharField(max_length=20)
 
@@ -25,12 +24,6 @@ class Recurso(models.Model):
         return self.tiporecurso
 
 
-'''class Notificacao(models.Model):
-    notas = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.notas
-   ''' 
 
 class Novoprojeto(models.Model):
     
@@ -61,16 +54,74 @@ class Novoprojeto(models.Model):
     data_inicio = models.DateField(null=True, blank=True)
     data_fim = models.DateField(null=True, blank=True)
 
-    ##notificacao = models.CharField(max_length=15, choices=NOTIFICACOES_CHOICES, null=True, blank=True)
-
-   
-
-    #**mais a frente, quando a data de finalização for preenchida; o campo 
-    #**Situação recebe automaticamente o status de finalizado!
-
-    #**outra funcionalidade: seria gerar alertas na tela inicial para os projetos próximos do vencimento
-    #**outra funcionalidade: seria a criação de dashboards para melhor visualização dos projetos
-
+  
     def __str__(self):
         return self.titulo
+
+    @property
+    def css_dificuldade(self):
+        if self.dificuldade == 'F':
+            return 'projeto-facil'
+        elif self.dificuldade == 'M':
+            return 'projeto-medio'
+        elif self.dificuldade == 'D':
+            return 'projeto-dificil'
+
+
+
+class Validacao(models.Model): 
+    #**trabalhar com a segurança de acessos 
+    projeto = models.ForeignKey(Novoprojeto, on_delete=models.DO_NOTHING) 
+
+    executado = models.BooleanField(default=False)  
+    aprovado = models.BooleanField(default=False)  
+   
+    def __str__(self):
+        return self.projeto.titulo  
+
+
+
+
+
+
+ 
+class Listagem(models.Model): 
+
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+        
+    descricao_home = models.CharField(max_length=100)
+
+
+    categoria = models.ManyToManyField(Categoria)
+   
+    quantidade_projetos = models.IntegerField()
+
+    dificuldade = models.CharField(     
+        max_length=1, choices=Novoprojeto.DIFICULDADE_CHOICES
+    )
+
+    projetos = models.ManyToManyField(Validacao)
+  
+
+    def __str__(self):
+        return self.descricao_home 
+
+    categoria = models.ManyToManyField(Categoria) #**na tela passa a categoria
+
+    categoria = models.ManyToManyField(Categoria)
+   
+    quantidade_projetos = models.IntegerField()
+
+    dificuldade = models.CharField(     
+        max_length=1, choices=Novoprojeto.DIFICULDADE_CHOICES
+    )
+
+    projetos = models.ManyToManyField(Validacao)
+  
+
+    def __str__(self):
+
+        return self.descricao_home ##**nome do ambiente criado 
+
+        return self.descricao_home 
 

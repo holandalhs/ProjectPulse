@@ -7,7 +7,29 @@
     <link href="{% static 'projeto/css/novo_projeto.css' %}" rel="stylesheet">
 {% endblock 'cabecalho' %}
 
+    
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Documento HTML</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    <script>
+        function formatarOrcamento(input) {
+            // Limitar o valor inserido a 4 casas decimais
+            input.value = parseFloat(input.value).toFixed(4);
+        }
+    </script>
+
+
+</head>
+
+
 {% block 'conteudo' %}
+
+    {% include "partials/header.html" %}
 
     <div class="container">
         <br>
@@ -46,49 +68,36 @@
                         <textarea class="form-control" placeholder="Observações." name="observacao"></textarea>
                         <br>
 
+
                         <div class="row">
+                            <div class="col">
+                                <label>Data de lançamento</label>
+                                <input type="date" class="form-control" placeholder="Inicial" name="data_inicio">
+                            </div>
+                            <div class="col">
+                                <label>Data término</label>
+                                <input type="date" class="form-control" name="data_fim">
+                            </div>
+                        </div>
 
-                            <br>
-                            <label>Data de lançamento</label>
-                            <input type="date" class="form-control" placeholder="Inicial" name="data_inicio">        
-                            <br>
 
-                            <br>
-                            <label>Data término</label>
-                            <input type="date" class="form-control" name="data_fim">                                
-                            <br>
-
-                            <!--
-                            <br>
+                        <div class="form-group">
                             <label>Orçamento</label>
-                            <input type="number" class="form-control" name="orcamento" step="0.01">                                                           
-                            <br>
-                            -->
+                            <input type="number" class="form-control" placeholder="R$" name="orcamento" step="0.0001" oninput="formatarOrcamento(this)">
+                        </div>
+                        
+
+                        
+
+                        
 
 
-                            <label>Orçamento</label>
-                            <input type="number" class="form-control" name="orcamento" step="0.01" oninput="formatarOrcamento(this)">
-                            <br>
-
-                            <script>
-                            function formatarOrcamento(input) {
-                                // Obtém o valor do campo
-                                let valor = input.value;
-                                
-                                // Formata o valor
-                                valor = parseFloat(valor).toFixed(4); // Define 4 casas decimais
-                                valor = "R$ " + valor; // Adiciona o símbolo R$
-                                
-                                // Atualiza o valor no campo
-                                input.value = valor;
-                            }
-                            </script>
-
+                        
                             
 
                                                           
 
-                        </div>
+                       
 
 
                         <div class="row">
@@ -159,13 +168,14 @@
 
 
             <!--***********************CONSULTAS*******************************************-->
-            <div class="col-md">      <!--FIIIIIIIIILTRARRR==DO LADO DIREITO DA TELA DE NOVO PROJETO -->
+            <div class="col-md">      <!--OS BOXES PARA FIIIIIIIIILTRARRR==DO LADO DIREITO DA TELA DE NOVO PROJETO -->
                 <form action="{% url 'novo_projeto' %}" method="GET"> <!--no get não precisa do csrf_token-->
                     <div class="row">
 
                         <div class="col-md">
                             <label for="">Categoria</label>
                             <select name="categoria" id="" class="form-select">
+                                
                                 <option value="">Todas as categorias</option>
                                 {% for categoria in categorias %}
                                     <option value="{{categoria.id}}">{{categoria.nome}}</option>
@@ -225,6 +235,7 @@
                             </select>
                         </div>
 
+                        
                         <div class="col-md">
                             <label for="">Recurso</label>
                             <select name="tiporecurso" id="" class="form-select">
@@ -289,28 +300,26 @@
                                 {{novo.categoria}} <!--POSSO ACESSAR OS CAMPOS DA TABELA/CLASSE DE MODEL.PY-->
                             </div>
 
-
-                            <!--
-                                <a href=""><i class='icone-exit bx bx-x-circle'></i></a>
-                                <br>
-                                <br>
-                                <div class="novoprojeto-box-item">
-                                    <p class="novoprojeto-item">{{novo.titulo}}</p>  
+                       
+                            <a href="{% url 'deletar_projeto' novo.id %}"><i class='icone-exit bx bx-x-circle'></i></a>
+                            <br>
+                            <br>
+                            <div class="novoprojeto-box-item">
+                                <p class="novoprojeto-item">{{novo.titulo}}</p>  
                                     
-                                    <label>Notificação do projeto</label>
-                                    <p>{{ novo.notificacao }}</p>
+                                <label>Notificação do projeto</label>
+                                <p>{{ novo.notificacao }}</p>
 
 
-                                </div>
-
-                            -->
-
-                            
+                            </div>
+                                
                             
                         </div>  
+
                         <div class="escopo-novoprojeto" id="{{novo.id}}">  <!--MAS O ESCOPO FICA OCULTO -->
                             {{novo.escopo}}
                         </div>
+
                     </div>
 
                     <br>
@@ -338,6 +347,13 @@
 
         }
     </script>
+
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Meu HTML</title>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
 
 
 

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'cabecalho' %}
+
+    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/novo_projeto.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/consultar_projeto.css' %}" rel="stylesheet">
+    <link href="{% static 'projeto/css/listar_projeto.css' %}" rel="stylesheet">
+    
+   
+    
+    <!--
+        <link href="{% static 'novoprojeto/css/listagem.css' %}" rel="stylesheet">     
+
+    -->      
+
+    
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+{% endblock 'cabecalho' %}
+
+
+{% block 'conteudo' %}
+
+    {% include "partials/header.html" %}
+
+    <div class="container">
+        <br>
+        <br>
+        <!--<th><a href="/admin/auth/user/1/change">{{user.id}}</a></th>-->
+        <label><strong>Olá! {{user.id}} <br> Listando projeto(s) do(s) seu(s) Ambiente(s)</strong></label>
+        <br>
+        <br> 
+        <div class="row">
+            <div class="col-md">
+                <form action="}" method="GET">
+                <label for="">Categoria</label>
+                <select name="categoria" class="form-select">
+                   
+                </select>
+            </div>
+            <div class="col-md">
+                <label for="">Dificuldade</label>
+                <select name="dificuldade" class="form-select">
+                    
+                </select>
+            </div>
+            <div class="col-md">
+                <br>
+                <input type="submit" value="Filtrar" class="btn-cadastro">
+                </form>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="box-listar">
+            <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Ambiente</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Escopo</th>
+                    <th scope="col">Dificuldade</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Recurso</th>
+                    <th scope="col">Orçamento</th>
+                    <th scope="col">Observação</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for listagem in ambientes %}
+                        <tr class="linha">
+                            <th><a href="{% url 'listagem' listagem.id %}">{{listagem.id}}</a></th>
+                            <td>{{listagem.descricao_home}}</td>
+                            <td>{{listagem.escopo}}</td>
+
+                            <td>{{listagem.get_dificuldade_display}}</td>
+                            <td>{{listagem.status}}</td> 
+                            <td>{{listagem.recurso}}</td>
+                            <td>{{listagem.orcamento}}</td>
+
+                            <td>{{listagem.observacao}}</td>
+
+                            
+                        </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+    <script src="{% static 'novoprojeto/js/novoprojeto.js' %}"></script>
+{% endblock 'conteudo' %}
