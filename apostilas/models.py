@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User 
 
 # Create your models here.
-##**a classe Apostila deve ser importada para admin.py do app 'apostilas'
 class Apostila(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     titulo = models.CharField(max_length=100)

@@ -15,7 +15,7 @@ def adicionar_apostilas(request):
     
     elif request.method == 'POST':
         titulo = request.POST.get('titulo')
-        arquivo = request.FILES['arquivo'] #**os arquivos vem com um atributo próprio FILES, não usa get/post 
+        arquivo = request.FILES['arquivo'] 
 
         apostila = Apostila(user=request.user, titulo=titulo, arquivo=arquivo)
         apostila.save()

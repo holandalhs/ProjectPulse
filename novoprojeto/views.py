@@ -50,8 +50,8 @@ def novo_projeto(request):
         })        
                           
     elif request.method == 'POST': 
-        titulo = request.POST.get('titulo')   #**variável criada = estou buscando da minha requisição com
-        escopo = request.POST.get('escopo')  #**o método post o valor com o name 'titulo' do novo_projeto.html
+        titulo = request.POST.get('titulo')   
+        escopo = request.POST.get('escopo') 
         observacao = request.POST.get('observacao')
 
         data_inicio = request.POST.get('data_inicio')
@@ -97,8 +97,8 @@ def novo_projeto(request):
             
             
         )                     
-        novo.save()  #**commitando, levando pro gerenciador do banco e salvando os dados 
-                        #**a variável novoprojeto recebe uma instancia de models.py
+        novo.save()  #**commit
+                      
                 
         messages.add_message(
             request, constants.SUCCESS, 'Projeto criado com sucesso'
@@ -108,7 +108,7 @@ def novo_projeto(request):
         
 
 
-def deletar_projeto(request, id):  #**passo o id que é passado na função como parâmetro
+def deletar_projeto(request, id):  
     projeto = Novoprojeto.objects.get(id=id)
 
     projeto.delete() 
@@ -155,13 +155,11 @@ def consultar_projeto(request):
 
         print(projetos.count()) #**para filtrar a qtd de projetos já lançados 
 
-        ##usando os slices do python ****FAZENDO A VALIDAÇÃO DE QTD_PROJETOS AQUI
-        if projetos.count() < int(qtd_projetos): ##**SE QTD > QUTJAREGISTRADA
+        ##usando os slices do python ****FAZENDO A VALIDAÇÃO 
+        if projetos.count() < int(qtd_projetos): 
             return redirect('/novoprojeto/consultar_projeto/')
-            #print(f'Quantidade informada não pemitida!')
         else:
-            ####****SE QTD <= QUTJAREGISTRADA PASSA
-            projetos = projetos[: int(qtd_projetos)] #**vai da posição 0 até a qtd informada
+            projetos = projetos[: int(qtd_projetos)] 
             print(f'quantidade de projetos para avaliação {projetos}')
 
         for f in projetos:
@@ -196,11 +194,11 @@ def listar_projeto(request):
 def listagem(request, id):
     projetos_vinculados = Listagem.objects.get(id=id)   
     
-    if not projetos_vinculados.user == request.user:  #**caso o ambiente não seja o meu, da http404 
+    if not projetos_vinculados.user == request.user:  
         raise Http404()
         
     
-    if request.method == 'GET':  #**buscando no banco 
+    if request.method == 'GET':  
         aprovados = projetos_vinculados.projetos.filter(executado=True).filter(aprovado=True).count()
         nao_aprovados = projetos_vinculados.projetos.filter(executado=True).filter(aprovado=False).count()
         a_avaliar = projetos_vinculados.projetos.filter(executado=False).count()
