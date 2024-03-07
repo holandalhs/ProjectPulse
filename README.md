@@ -103,6 +103,7 @@ O **ProjectPulse** é um projeto de desenvolvimento web utilizando Django, um fr
 O ProjectPulse foca no gerenciamento de projetos de forma humanizada, envolvendo toda a equipe. 
 
 
+Luanna Siqueira curso.siqueira@gmail.com
 
 
 
